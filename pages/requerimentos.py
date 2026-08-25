@@ -1,5 +1,5 @@
 from reactpy import component, html, hooks
-from database.connection import ler_csv, salvar_csv
+from database.connection import ler_csv, escrever_csv
 
 @component
 def PaginaRequerimentos(usuario_logado):
@@ -14,7 +14,7 @@ def PaginaRequerimentos(usuario_logado):
             "tipo": tipo,
             "status": "Pendente"
         })
-        salvar_csv("requerimentos", novos)
+        escrever_csv("requerimentos", novos, ["id", "aluno_id", "tipo", "status"])
         set_reqs(novos)
 
     lista_visivel = reqs if usuario_logado["perfil"] == "administrador" else [r for r in reqs if r["aluno_id"] == usuario_logado.get("aluno_id")]

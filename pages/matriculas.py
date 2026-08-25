@@ -1,15 +1,13 @@
 # pages/matriculas.py
 from reactpy import component, html, hooks
-from database.connection import BANCO_MEMORIA
+from database.connection import ler_csv, escrever_csv
 
 @component
 def PaginaMatriculas():
-    # Estados locais baseados no banco em memória
-    matriculas, set_matriculas = hooks.use_state(BANCO_MEMORIA["matriculas"])
-    alunos = BANCO_MEMORIA["alunos"]
-    turmas = BANCO_MEMORIA["turmas"]
+    matriculas, set_matriculas = hooks.use_state(ler_csv("matriculas"))
+    alunos = ler_csv("alunos")
+    turmas = ler_csv("turmas")
 
-    # Campos do formulário
     aluno_selecionado, set_aluno_selecionado = hooks.use_state(str(alunos[0]["id"]) if alunos else "")
     turma_selecionada, set_turma_selecionada = hooks.use_state(str(turmas[0]["id"]) if turmas else "")
     periodo, set_periodo = hooks.use_state("2026/1")
@@ -17,27 +15,26 @@ def PaginaMatriculas():
     def realizar_matricula(event):
         if aluno_selecionado and turma_selecionada:
             nova = {
-                "id": len(matriculas) + 1,
-                "aluno_id": int(aluno_selecionado),
-                "turma_id": int(turma_selecionada),
+                "id": str(len(matriculas) + 1),
+                "aluno_id": str(aluno_selecionado),
+                "turma": str(turma_selecionada),
                 "periodo": periodo,
                 "status": "Ativo"
             }
-            # Atualiza memória global e estado local
-            BANCO_MEMORIA["matriculas"].append(nova)
-            set_matriculas(list(BANCO_MEMORIA["matriculas"]))
+            novos_dados = list(matriculas)
+            novos_dados.append(nova)
+            escrever_csv("matriculas", novos_dados, ["id", "aluno_id", "turma", "periodo", "status"])
+            set_matriculas(novos_dados)
 
-    # Função auxiliar para buscar nome do aluno pelo ID
     def obter_nome_aluno(aid):
         for a in alunos:
-            if a["id"] == aid:
+            if str(a["id"]) == str(aid):
                 return a["nome"]
         return "Desconhecido"
 
-    # Função auxiliar para buscar nome da turma pelo ID
     def obter_nome_turma(tid):
         for t in turmas:
-            if t["id"] == tid:
+            if str(t["id"]) == str(tid):
                 return t["nome"]
         return "Desconhecida"
 
@@ -101,7 +98,7 @@ def PaginaMatriculas():
                     html.tr(
                         html.td({"style": {"border": "1px solid #ccc", "padding": "8px"}}, str(m["id"])),
                         html.td({"style": {"border": "1px solid #ccc", "padding": "8px"}}, obter_nome_aluno(m["aluno_id"])),
-                        html.td({"style": {"border": "1px solid #ccc", "padding": "8px"}}, obter_nome_turma(m["turma_id"])),
+                        html.td({"style": {"border": "1px solid #ccc", "padding": "8px"}}, obter_nome_turma(m.get("turma_id", m.get("turma", "")))),
                         html.td({"style": {"border": "1px solid #ccc", "padding": "8px"}}, m["periodo"]),
                         html.td({"style": {"border": "1px solid #ccc", "padding": "8px"}}, m["status"]),
                     )

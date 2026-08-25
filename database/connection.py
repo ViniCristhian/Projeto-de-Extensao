@@ -39,23 +39,25 @@ ESQUEMAS = {
     }
 }
 
-def ler_csv(tabela):
-    caminho = os.path.join(DATA_DIR, f"{tabela}.csv")
-    esquema = ESQUEMAS[tabela]
-    
+def ler_csv(nome_tabela: str) -> list[dict]:
+    caminho = os.path.join(DATA_DIR, f"{nome_tabela}.csv")
     if not os.path.exists(caminho):
-        salvar_csv(tabela, esquema["inicial"])
-        return esquema["inicial"]
-    
+        return []
     with open(caminho, mode="r", encoding="utf-8") as f:
         reader = csv.DictReader(f)
-        return list(reader)
+        return [dict(row) for row in reader]
 
-def salvar_csv(tabela, dados):
-    caminho = os.path.join(DATA_DIR, f"{tabela}.csv")
-    cols = ESQUEMAS[tabela]["cols"]
-    
-    with open(caminho, mode="w", newline="", encoding="utf-8") as f:
-        writer = csv.DictWriter(f, fieldnames=cols)
+def escrever_csv(nome_tabela: str, dados: list[dict], colunas: list[str]):
+    os.makedirs(DATA_DIR, exist_ok=True)
+    caminho = os.path.join(DATA_DIR, f"{nome_tabela}.csv")
+    with open(caminho, mode="w", encoding="utf-8", newline="") as f:
+        writer = csv.DictWriter(f, fieldnames=colunas)
         writer.writeheader()
         writer.writerows(dados)
+
+def autenticar_usuario(login: str, senha: str) -> dict | None:
+    usuarios = ler_csv("usuarios")
+    for usuario in usuarios:
+        if usuario.get("login") == login and usuario.get("senha") == senha:
+            return usuario
+    return None

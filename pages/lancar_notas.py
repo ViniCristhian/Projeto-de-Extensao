@@ -1,5 +1,5 @@
 from reactpy import component, html, hooks
-from database.connection import ler_csv, salvar_csv
+from database.connection import ler_csv, escrever_csv
 
 @component
 def PaginaLancarNotas():
@@ -21,7 +21,7 @@ def PaginaLancarNotas():
                 "nota": valor_nota,
                 "periodo": "2026/1"
             })
-            salvar_csv("notas", novas)
+            escrever_csv("notas", novas)
             set_notas(novas)
             set_valor_nota("")
 

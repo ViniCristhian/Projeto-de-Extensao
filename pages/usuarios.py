@@ -1,5 +1,5 @@
 from reactpy import component, html, hooks
-from database.connection import ler_csv, salvar_csv
+from database.connection import ler_csv, escrever_csv
 
 @component
 def PaginaUsuarios():
@@ -23,7 +23,7 @@ def PaginaUsuarios():
                 "nome": nome,
                 "aluno_id": aluno_id if perfil == "aluno" else ""
             })
-            salvar_csv("usuarios", novos_dados)
+            escrever_csv("usuarios", novos_dados)
             set_usuarios(novos_dados)
             set_login(""); set_senha(""); set_nome("")
 

@@ -1,2 +1,6 @@
 id,aluno_id,tipo,status
 1,1,Declaração de Matrícula,Pendente
+2,,Revisão de Nota,Pendente
+3,,Revisão de Nota,Pendente
+4,,Histórico Escolar,Pendente
+5,,Declaração de Matrícula,Pendente
