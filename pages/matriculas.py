@@ -35,8 +35,7 @@ def PaginaMatriculas():
 
         registros = list(matriculas)
         dados = {
-            "id": str(editando_id) if editando_id is not None else str(gerar_novo_id("matriculas")),
-            "aluno_id": str(aluno_selecionado),
+            "matricula": str(editando_id) if editando_id is not None else str(gerar_novo_id("matriculas")),
             "turma": str(turma_selecionada),
             "periodo": periodo or "2026/1",
             "status": status,
