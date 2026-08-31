@@ -22,7 +22,11 @@ def dashboard(usuario_logado, navegar):
         ]
         atalhos = [
             ("usuarios", "👤 Gestão de Perfis"),
-            ("notas", "📝 Lançar Notas"),
+            ("alunos", "🎓 Alunos"),
+            ("professores", "🧑‍🏫 Professores"),
+            ("disciplinas", "📚 Disciplinas"),
+            ("matriculas", "📝 Matrículas"),
+            ("notas", "📊 Lançar Notas"),
             ("requerimentos", "📨 Requerimentos"),
         ]
     elif perfil == "professor":
@@ -33,7 +37,10 @@ def dashboard(usuario_logado, navegar):
             {"titulo": "Requerimentos Pendentes", "valor": formatar_numero(sum(1 for r in requerimentos if r.get("status") == "Pendente")), "cor": "#d97706"},
         ]
         atalhos = [
-            ("notas", "📝 Lançar Notas"),
+            ("alunos", "🎓 Alunos"),
+            ("disciplinas", "📚 Disciplinas"),
+            ("matriculas", "📝 Matrículas"),
+            ("notas", "📊 Lançar Notas"),
             ("requerimentos", "📨 Ver Requerimentos"),
         ]
     elif perfil == "aluno":
